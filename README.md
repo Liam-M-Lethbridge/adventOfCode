@@ -1,0 +1,1 @@
+This is a repository for advent of code solutions. I am writing this in many languages to test myself and learn.
