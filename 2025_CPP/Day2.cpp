@@ -8,44 +8,36 @@ long long checkRangePart2(string num1, string num2){
     string word;
     string portion;
     bool weAreChecking = true;
-    bool numberChecked = false;
-    // otherwise, we check each number from num1 to num2
+    // for each value in the range we check.
     for(long long i = stoll(num1); i <= stoll(num2); i++){
-        numberChecked = false;
         word = to_string(i);
         length = word.length();
+        // we also check each valid number we can split the string into to make equal parts.
         for(int div = 2; div <= length;div++){
 
-
-            // if (numberChecked == true){
-            //     numberChecked = false;
-            //     break;
-            // }
+            // checking validity
             if (length%div == 0){
+                // store for comparisons
                 portion = word.substr(0,length/div);
-
-                cout << portion;
                 weAreChecking = true;
-                for(int nextOne = 1; nextOne < div; nextOne++){
-                    cout << " and ";
-                    cout << word.substr(nextOne*(length/div),length/div);
 
+                // for each subset, we check if the subset equals the variable 'portion'. If not then this is not a repeating pattern and we can skip this division number.
+                for(int nextOne = 1; nextOne < div; nextOne++){
                     if(word.substr(nextOne*(length/div),length/div)!=portion){
-                        cout << " Nope \n";
                         weAreChecking = false;
                         break;
                     }
                 }
+                // if we reach this point and find that 'weAreChecking' has not been set to false then we have checked that each portion is equal and can add to the total.
                 if(weAreChecking==true){
-                    cout << "\n";
-                    cout << i;
-                    cout << "\n";
                     total += i;
+
+                    // important to break here so that we skip the rest of the checks. We don't want to end up adding the same number twice 
+                    // e.g. 1111 can be split into two equal part 11 and 11 or four equal parts but we only want to add it to the total once.
                     break;
                 }
                 else{
                     weAreChecking=true;
-                    // break;
                 }
             }
         }
@@ -57,15 +49,15 @@ long long checkRange(string num1, string num2){
     long long total = 0;
     int length;
     string word;
-    // otherwise, we check each number from num1 to num2
+    // for each value in the range we check.
     for(long long i = stoll(num1); i <= stoll(num2); i++){
         word = to_string(i);
         length = word.length();
+        // if the length is odd then we can skip it as it cannot make two equal parts.
         if (length%2 == 0){
+            // if the two parts are equal we add it to the total.
             if(word.substr(0,length/2) == word.substr(length/2)){
                 total += i;
-                cout << i;
-                cout << "\n";
             }
         }
     }
@@ -85,11 +77,7 @@ int main(){
         if(x.substr(i,1) == ","){
             // find where the '-' is and split the string in two around it.
             p = (int)(strchr(workingString.c_str(), '-') - workingString.c_str());
-            cout << "\n";
-            cout << workingString.substr(0, p);
-            cout << "\n";
-            cout << workingString.substr(p+1);
-            cout << "\n\n";
+     
             total += checkRangePart2(workingString.substr(0, p), workingString.substr(p+1));
             workingString = "";
         }else{
