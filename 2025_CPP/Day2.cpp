@@ -3,6 +3,15 @@
 using namespace std;
 
 long long checkRangePart2(string num1, string num2){
+    /**
+     * sums all of the invalid IDs in the range according to the part 2 spec. 
+     * 
+     * @param num1 - the start of the range.
+     * @param num2 - the end of the range.
+     * 
+     * @returns the sum of invalid IDs in the range.
+     */
+
     long long total = 0;
     int length;
     string word;
@@ -46,6 +55,15 @@ long long checkRangePart2(string num1, string num2){
 }
 
 long long checkRange(string num1, string num2){
+       /**
+     * sums all of the invalid IDs in the range according to the part 1 spec. 
+     * 
+     * @param num1 - the start of the range.
+     * @param num2 - the end of the range.
+     * 
+     * @returns the sum of invalid IDs in the range.
+     */
+    
     long long total = 0;
     int length;
     string word;

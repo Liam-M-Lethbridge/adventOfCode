@@ -15,6 +15,12 @@ class Dial {
             ignore = false;
         }
         void rotate(string input){
+            /**
+             * Rotates the dial according to the instruction. 
+             * 
+             * @param input - the instruction input.
+             */
+                    
             // We know that the input is of the form "ANN" where the first value is a either L or R and everything following is a number
             if (input.length() < 2) return;
             if (input.substr(0,1) != "R" && input.substr(0,1) != "L") return;

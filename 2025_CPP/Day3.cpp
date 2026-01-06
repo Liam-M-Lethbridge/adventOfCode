@@ -6,7 +6,16 @@ std::ifstream input("thefile.txt");
 using namespace std;
 
 int findBiggestNumber(string line, int &index, int minus){
-    // finds the largest number by checking for 9 then 8 then 7 and so on. 
+    /**
+     * Finds the largest number by checking for 9 then 8 then 7 and so on. 
+     * 
+     * @param line - the grid.
+     * @param index - the index we are checking.
+     * @param minus - how far away from the edge of the string we are allowed to look.
+     * 
+     * @returns the largest number given the restrictions.
+     */
+
     for(int largest=9; largest >0; largest--){
         // we make sure we start after the previous largest number was found but also make sure we don't choose a value too close to the right end of the number
         for(int i = index; i < line.length()-minus; i++){
