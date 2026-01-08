@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-std::ifstream input("thefile.txt");
+std::ifstream input("theFile.txt");
 
 using namespace std;
 
@@ -35,7 +35,7 @@ int main(){
     int index1 = 0;
     string x, c;
     // reading line by line from a file this time because it was cleaner than copying and pasting
-    for( std::string line; getline(input, line); )
+    for(string line; getline(input, line); )
     {
         
         for(int i = 0; i < 12; i++){

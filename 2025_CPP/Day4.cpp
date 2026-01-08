@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-std::ifstream input("thefile.txt");
+std::ifstream input("theFile.txt");
 
 using namespace std;
 

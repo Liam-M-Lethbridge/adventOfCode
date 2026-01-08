@@ -2,11 +2,19 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include <algorithm>
-std::ifstream input("thefile.txt");
+std::ifstream input("theFile.txt");
 using namespace std;
 
 bool checkInRange(string range, long long number){
+     /**
+     * Given a number and a range, check if the number lies in the range. 
+     * 
+     * @param range - the range.
+     * @param number - the number.
+     * 
+     * @returns the combined ranges.
+     */
+    
     int index = (int)(strchr(range.c_str(), '-')- range.c_str());
 
     long long smallerNumber = stoll(range.substr(0,index));
@@ -20,6 +28,15 @@ bool checkInRange(string range, long long number){
 
 
 vector<string> combineRanges(vector<string> ranges, vector<string> ranges2){
+     /**
+     * Combines two lists of ranges by merging any ranges which coincide between the first and second ranges.
+     * This function does not guarantee the process will end in a set of ranges with no overlaps. 
+     * 
+     * @param ranges - the first set of ranges.
+     * @param ranges2 - the second set of ranges.
+     * 
+     * @returns true if number is in range, otherise false.
+     */
     for(int i =0; i< ranges.size(); i++){
         bool found = false;
         for(int j = 0; j < ranges2.size(); j++){
@@ -77,18 +94,30 @@ vector<string> combineRanges(vector<string> ranges, vector<string> ranges2){
     }
     return ranges2;
 }
-long long countEm(vector<string> finalRanges){
+long long countEm(vector<string> ranges){
+     /**
+     * Given a vector of ranges which don't overlap, count how many numbers total lie in the ranges.
+     * 
+     * @param ranges - the vector of ranges.
+     * 
+     * @returns the number.
+     */
     long long count = 0;
-    for(int i =0; i< finalRanges.size(); i++){
-        int index = (int)(strchr(finalRanges[i].c_str(), '-')- finalRanges[i].c_str());
-        long long smallerNumber = stoll(finalRanges[i].substr(0,index));
-        long long largerNumber = stoll(finalRanges[i].substr(index+1));
+    for(int i =0; i< ranges.size(); i++){
+        int index = (int)(strchr(ranges[i].c_str(), '-')- ranges[i].c_str());
+        long long smallerNumber = stoll(ranges[i].substr(0,index));
+        long long largerNumber = stoll(ranges[i].substr(index+1));
         count = count + (largerNumber-smallerNumber)+1;
     }
     return count;
 }
 
 void printRanges(vector<string> arr){
+    /**
+     * Prints the ranges in a set of ranges
+     * 
+     * @param arr - the vector of ranges.
+     */
     for(int i = 0; i< arr.size();i++){
         cout << arr[i];
         cout << "\n";
@@ -100,14 +129,14 @@ int main(){
     vector<string> ranges;
     vector<long long> numbers;
     // save ranges
-    for( std::string line; getline(input, line);){
+    for(string line; getline(input, line);){
         if(line.length() == 0){
             break;
         }
         ranges.push_back(line);
     }
     // save numbers
-    for( std::string line; getline(input, line);){
+    for(string line; getline(input, line);){
         numbers.push_back(stoll(line));
     }
 
