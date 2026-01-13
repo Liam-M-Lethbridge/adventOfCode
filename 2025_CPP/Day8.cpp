@@ -7,7 +7,7 @@
 using namespace std;
 
 
-std::ifstream input("theFile.txt");
+ifstream input("theFile.txt");
 
 class Network{
     public:
