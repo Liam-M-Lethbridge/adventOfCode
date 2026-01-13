@@ -9,24 +9,41 @@ ifstream input("theFile.txt");
 // part two is crazy.
 // however I think there is a possibility of an efficient algorithm.
 // If I can figure out how to determine if a vertex is concave or convex?
-// a vertex is concave if it "turns inwards". A square has 4 concave vertices. 
+// a vertex is concave if it "turns inwards". A rectangle has 4 concave vertices. 
 // with every new convex edge, a concave edge would be needed to eventually complete the shape and vice vera.
 // We can figure out the distinction between convex and concave because one turns clockwise and the other anticlockwise.
-// Hence there will be 4 more concave edges.
-// A square is invalid if:
-    // the square contains any verticies not on the edge of it.
-    // the square contains any convex vertices on the edge of it but not on the corner.
-    // the square contains any concave vertices on the corner of it.
+// Hence there will be 4 more concave edges and we can determine which vertices are concave and which are convex.
+// A rectangle is invalid if:
+    // the rectangle contains any points strictly inside it
+    // the rectangle contains any concave vertices on the edge of it but not on the corner.
+    // the points defining the corners of the shape are orinetataed in correctly with respect to the rectangle.
+    // If any of the edges of the rectangle intersect an edge of the shape.
+    // if an edge of the shape completely bisects the rectangle. (edge case when the points of the edge lie on the edges of the rectangle)
     
     
-// How do we find which vertices are convex and which are concave? With any shape, there will be 4 more concave vertices than convex vertices
 long calcSize(vector<long> pointA, vector<long> pointB){
-
+    /**
+     * Calculates the size of the rectangle defined by the two points.
+     * 
+     * @param pointA - the first coordinate.
+     * @param pointB - the second coordinate.
+     * 
+     * @returns the size of the rectangle.
+     */
     return (abs(pointA[0] - pointB[0])+1) * (abs(pointA[1] - pointB[1])+1);
 }
 
 
 int calcCrossProduct(vector<long> x, vector<long> y, vector<long> z){
+    /**
+     * Calculates the cross product of the two line vectors AB and BC.
+     * 
+     * @param pointA - point A.
+     * @param pointB - point B.
+     * @param pointB - point C.
+     * 
+     * @returns the cross product.
+     */
 
     // x and y will share a coordinate so we can add the differences for each axis and get the distance between them regardless
     // same with y and z
@@ -38,6 +55,19 @@ int calcCrossProduct(vector<long> x, vector<long> y, vector<long> z){
 }
 
 bool checkStrictlyInBox(int minX, int maxX, int minY, int maxY, vector<long> point){
+    /**
+     * Checks if a point lies strictly within the rectangle.
+     * 
+     * @param minX - the minimum x value of the rectangle.
+     * @param maxX - the maximum x value of the rectangle.
+     * @param minY - the minimum y value of the rectangle.
+     * @param maxY - the maximum y value of the rectangle.
+     * @param point - the point being checked.
+     * 
+     * @returns true if the point lies within the rectangle. False otheriwse.
+     */
+
+    
     // checks if point lies strictly within the bounding box
     if(point[0] > minX && point[0] < maxX && point[1] > minY && point[1] < maxY){
         return true;
@@ -46,14 +76,18 @@ bool checkStrictlyInBox(int minX, int maxX, int minY, int maxY, vector<long> poi
 
 }
 
-bool checkOnCorners(int minX, int maxX, int minY, int maxY, vector<long> point){
-    if((point[0] == minX || point[0] == maxX) && (point[1] == minY || point[1] == maxY)){
-        return true;
-    }
-    return false;
-}
-
 bool checkStrictlyOnEdges(int minX, int maxX, int minY, int maxY, vector<long> point){
+    /**
+     * Checks if a point lies strictly on the edges of the rectangle but not the corners.
+     * 
+     * @param minX - the minimum x value of the rectangle.
+     * @param maxX - the maximum x value of the rectangle.
+     * @param minY - the minimum y value of the rectangle.
+     * @param maxY - the maximum y value of the rectangle.
+     * @param point - the point being checked.
+     * 
+     * @returns true if the point lies within the edges of the rectangle. False otheriwse.
+     */
 
     // to lie on an edge, the line must either equal minX or maxX and lie in the range (minY, maxY) or vice versa
     if((point[0] == minX || point[0] == maxX) && (point[1] > minY && point[1] < maxY)){
@@ -67,6 +101,18 @@ bool checkStrictlyOnEdges(int minX, int maxX, int minY, int maxY, vector<long> p
 
 
 bool checkIntersection(long minX, long maxX, long minY, long maxY, vector<long> linePoint1, vector<long> linePoint2){
+    /**
+     * Checks if a line defined by two points intersects any of the edges of the rectangle.
+     * 
+     * @param minX - the minimum x value of the rectangle.
+     * @param maxX - the maximum x value of the rectangle.
+     * @param minY - the minimum y value of the rectangle.
+     * @param maxY - the maximum y value of the rectangle.
+     * @param point1 - the first point of the line.
+     * @param point1 - the second point of the line.
+     * 
+     * @returns true if any of the edges intersect the lines. False otherwise.
+     */
 
     // we can guarantee that the lines are either horizontal or vertical by the problem's restrictions
     long maxLine, minLine;
@@ -86,24 +132,6 @@ bool checkIntersection(long minX, long maxX, long minY, long maxY, vector<long> 
             return true;
         }
 
-        // there is also an edge case where a line lies between two opposite edges:
-        //  #XO OX#    #XO OX#
-        //  XXX XXX    XXO OXX
-        //  XXXXXXX    XX---XX
-        //  XXXXXXX -> XXOOOXX
-        //  XXXXXXX    XXOOOXX
-        //  #XOXOX#    #XOOOX#
-        //    XXX        XXX
-        //    #X#        #X#
-        // the line --- lies between two edges and we end up with invalid rectangle
-
-        // to determine this line, we check if shared coordinate lies in the min and max, and that the end points of the line equal the edge
-        // we check that the ends of the line meet the two perpendicular edges of the rectangle and lie between the parallel edges of the rectangle
-        if((linePoint1[0] > minX && linePoint1[0] < maxX)&&(minY == minLine && maxY == maxLine)){
-            return true;
-        }
-
-
     }
     // else if it's horizontal we do similar.
     else{
@@ -120,15 +148,24 @@ bool checkIntersection(long minX, long maxX, long minY, long maxY, vector<long> 
         if((linePoint1[1] > minY && linePoint1[1] < maxY) && ((minX <  maxLine && minX > minLine) || (maxX <  maxLine && maxX > minLine))){
             return true;
         }
-        if((linePoint1[1] > minY && linePoint1[1] < maxY)&&(minX == minLine && maxX == maxLine)){
-            return true;
-        }
+
     }
     return false;
 
 }
 
 bool checkIfValid(vector <vector <long> > points,vector <int> vertexTypes, vector<vector<int> > vertexDirs, int pointIndex1,int pointIndex2){
+    /**
+     * Checks if the rectangle defined by two points is a valid rectangle.
+     * 
+     * @param points - the points.
+     * @param vertexTypes - a vector correlating to the type of each vertex, -1 for concave and 1 for convex.
+     * @param vertexDirs - a vector correlating to the direction of each angle (e.g. the top left corner of a square would have the value "(1,-1)").
+     * @param pointIndex1 - the index of the first point.
+     * @param pointIndex1 - the index of the second point.
+     * 
+     * @returns true if the rectangle is valid. False otherwise.
+     */
 
     vector <long> point1 = points[pointIndex1];
     vector <long> point2 = points[pointIndex2];
@@ -271,10 +308,8 @@ bool checkIfValid(vector <vector <long> > points,vector <int> vertexTypes, vecto
             }
         }
     }
-    
 
-
-    // really the only reliable way to check is to determine if there's an intersection between the edges of the rectangle and the edges of the shape
+    // next to determine if there's an intersection between the edges of the rectangle and the edges of the shape
     // if there is any intersection we can dismiss the rectangle.
 
     int linePoint2;
@@ -292,6 +327,16 @@ bool checkIfValid(vector <vector <long> > points,vector <int> vertexTypes, vecto
 }
 
 vector<int> findPointDirection(vector<long> point1, vector<long> point2, vector<long> point3){
+    /**
+     * Calculates the direction of the corner defined by two lines AB and BC.
+     * 
+     * @param point1 - point A.
+     * @param point2 - point B.
+     * @param point3 - point C.
+     * 
+     * @returns the direction of the corner.
+     */
+
     vector<int> direction;
     if((point2[0]- point3[0]) + (point2[0]-point1[0]) < 0){
         direction.push_back(-1);
@@ -352,19 +397,10 @@ int main(){
     int currentPos = 0;
     int nextPos = 1;
     for(int i = 0; i < points.size()-1;i++){
-        // cout << prevPos;
-        // cout << " ";
-        // cout << currentPos;
-        // cout << " ";
-        // cout << nextPos;
-        // cout << " ";
-
-
         
         vertexTypes.push_back(calcCrossProduct(points[prevPos], points[currentPos], points[nextPos]));
         vertexDirs.push_back(findPointDirection(points[prevPos], points[currentPos], points[nextPos]));
-        // cout << vertexTypes[currentPos];
-        // cout << "\n";
+
         prevPos = currentPos;
         currentPos = nextPos;
         nextPos++;
@@ -397,6 +433,7 @@ int main(){
 
     // now we look for the max value;
     maxVal = 0;
+    int nValid = 0;
     for(int i = 0; i < points.size();i++){
         vector<float> distances;
         for(int j = i+1; j < points.size(); j++){
@@ -404,22 +441,16 @@ int main(){
             // check if the pair is valid
             if(checkIfValid(points, vertexTypes, vertexDirs, i, j)){
                 currentVal = calcSize(points[i], points[j]);
-
-                cout << i;
-                cout << " and ";
-                cout << j;
-                cout << " make a valid rectangle.";
-                cout << "\n";
-
+                nValid ++;
                 if(currentVal > maxVal){
                     maxVal = currentVal;
                 }
             }
         }
     }
-    cout << "Part 2 output:\n";
+    cout << "\n";
+    cout << nValid;
+    cout << "\nPart 2 output:\n";
     cout << maxVal;
-
-
 }
 

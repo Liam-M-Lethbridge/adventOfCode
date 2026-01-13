@@ -26,11 +26,25 @@ class Node{
         }
 
         void connectToNetwork(shared_ptr<Network> net){
+             /**
+             * Connects the point to the network.
+             * 
+             * @param net - the network.
+             * 
+             * @returns true if the rectangle is valid. False otherwise.
+             */
             net->nNodes += 1;
             connected = true;
             network = net;
         }
         void moveToNetwork(shared_ptr<Network> newNet){
+             /**
+             * Connects the point to the newnetwork.
+             * 
+             * @param net - the network.
+             * 
+             * @returns true if the rectangle is valid. False otherwise.
+             */
             network = newNet;
         }
 
@@ -39,6 +53,14 @@ class Node{
 
 
 float calcNorm(vector<int>  a, vector<int>b){
+    /**
+     * Calculates the size of the distance between two 3D points.
+     * 
+     * @param a - the first point.
+     * @param b - the second point.
+     * 
+     * @returns the Euclidean distance between two points.
+     */
     float total = 0;
     for(int i = 0; i<3; i++){
         total += pow((a[i] - b[i]),2);
@@ -47,6 +69,14 @@ float calcNorm(vector<int>  a, vector<int>b){
 }   
 
 vector<int> findMin(vector<vector<float> > matrixOfDistances){
+    /**
+     * Finds the minimum value in the matrix of distances.
+     * 
+     * @param matrixOfDistances - the matrix of distances between the list of nodes. 
+     * 
+     * @returns the 2D index of the smallest entry in the matrix.
+     */
+
     float minValue = numeric_limits<float>::max();
     int x, y;
     for(int i = 0; i< matrixOfDistances.size(); i++){
@@ -65,6 +95,14 @@ vector<int> findMin(vector<vector<float> > matrixOfDistances){
 }
 
 int findMax(vector<shared_ptr<Network> > networks){
+    /**
+     * Finds the maximum length network in a list of networks.
+     * 
+     * @param networks - the list of networks.
+     * 
+     * @returns the index of the largest length network in the matrix.
+     */
+
     float maxValue = -1;
     int x;
     for(int i = 0; i< networks.size(); i++){
@@ -79,6 +117,15 @@ int findMax(vector<shared_ptr<Network> > networks){
 }
 
 bool checkRow(vector<vector<int> > connectionsMatrix, int rowIndex){
+    /**
+     * Each row in the connections matrix represents a nodes. If there is a 1 in this row then the node has been connected to a network.
+     * 
+     * @param connectionsMatrix - the matrix of conections between nodes.
+     * @param rowIndex - the index of the row we are checking.
+     * 
+     * @returns true if the matrix contains a 1. False otherwise.
+     */
+
     for(int i = 0; i < connectionsMatrix.size(); i++){
         if(connectionsMatrix[rowIndex][i] == 1){
             return true;
@@ -89,14 +136,24 @@ bool checkRow(vector<vector<int> > connectionsMatrix, int rowIndex){
 
 
 vector<int> connectPoints(vector<vector<float> > matrixOfDistances,vector<Node> &nodes, vector<shared_ptr<Network> > &networks){
-vector<shared_ptr<Network> > nodeNetworks;
-for(int i = 0; i < nodes.size(); i++){
-    nodeNetworks.push_back(0);
-}
+    /**
+     * Connects points by iteratively connecting the closest two nodes provided that they are not already part of a network.
+     * 
+     * @param matrixOfDistances - the matrix of distances between the list of points 
+     * @param nodes - the vector of nodes.
+     * @param networks - the vector of networks.
+     * 
+     * @returns the indices of the last two nodes to be connected..
+     */
 
-vector<int> coords;
-int nConnections = matrixOfDistances.size();
-    // for part one, replace while loop with for loop
+    vector<shared_ptr<Network> > nodeNetworks;
+    for(int i = 0; i < nodes.size(); i++){
+        nodeNetworks.push_back(0);
+    }
+
+    vector<int> coords;
+    int nConnections = matrixOfDistances.size();
+        // for part one, replace while loop with for loop
     for(int l = 0; l < 1000; l++){
     // for part two, use while loop
     // while(true){
